@@ -1,6 +1,7 @@
 #include <PidController.h>
 
-PidController::PidController(T targetValue, unsigned char length, unsigned char terms = 0xff)
+template <class T>
+PidController<T>::PidController(T targetValue, unsigned char length, unsigned char terms = 0xff)
 {
 	_targetValue = targetValue;
 	_length = length;
@@ -8,57 +9,68 @@ PidController::PidController(T targetValue, unsigned char length, unsigned char 
 	_values = new T[length];
 };
 
-PidController::~PidController(void)
+template <class T>
+PidController<T>::~PidController(void)
 {
 	delete [] _values;
 };
 
-unsigned char PidController::getTerms()
+template <class T>
+unsigned char PidController<T>::getTerms()
 {
 	return _terms;
 };
 
-void PidController::setTerms(unsigned char terms)
+template <class T>
+void PidController<T>::setTerms(unsigned char terms)
 {
 	_terms = terms;
 };
 
-float PidController::getProportionalGain(void)
+template <class T>
+float PidController<T>::getProportionalGain(void)
 {
 	return _proportionalGain;
 };
 
-void PidController::setProportionalGain(float proportionalGain)
+template <class T>
+void PidController<T>::setProportionalGain(float proportionalGain)
 {
 	_proportionalGain = proportionalGain;
 };
 
-float PidController::getIntegralGain(void)
+template <class T>
+float PidController<T>::getIntegralGain(void)
 {
 	return _integralGain;
 };
 
-void PidController::setIntegralGain(float integralGain)
+template <class T>
+void PidController<T>::setIntegralGain(float integralGain)
 {
 	_integralGain = integralGain;
 };
 
-float PidController::getDerivativeGain(void)
+template <class T>
+float PidController<T>::getDerivativeGain(void)
 {
 	return _derivativeGain;
 };
 
-void PidController::setDerivativeGain(float derivativeGain)
+template <class T>
+void PidController<T>::setDerivativeGain(float derivativeGain)
 {
 	_derivativeGain = derivativeGain;
 };
 
-void PidController::addValue(T value)
+template <class T>
+void PidController<T>::addValue(T value)
 {
 	
 };
 
-T PidController::calculate()
+template <class T>
+T PidController<T>::calculate()
 {
 	T result = (T)0;
 
@@ -81,21 +93,24 @@ T PidController::calculate()
 	return result;
 };
 
-T PidController::calculateProportional()
+template <class T>
+T PidController<T>::calculateProportional()
 {
 	T result = (T)0;
 
 	return result;
 };
 
-T PidController::calculateIntegral()
+template <class T>
+T PidController<T>::calculateIntegral()
 {
 	T result = (T)0;
 
 	return result;
 };
 
-T PidController::calculateDerivative()
+template <class T>
+T PidController<T>::calculateDerivative()
 {
 	T result = (T)0;
 
