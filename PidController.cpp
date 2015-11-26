@@ -64,6 +64,12 @@ void PidController<T>::setDerivativeGain(float derivativeGain)
 };
 
 template <class T>
+T *PidController<T>::getValues(void)
+{
+	return _values;
+};
+
+template <class T>
 void PidController<T>::addValue(T value)
 {
 	

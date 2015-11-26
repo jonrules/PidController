@@ -22,6 +22,8 @@ class PidController
 		float getDerivativeGain(void);
 		void setDerivativeGain(float derivativeGain);
 
+		T *getValues();
+
 		void addValue(T value);
 
 		T calculate();
