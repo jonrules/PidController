@@ -11,15 +11,15 @@ template <class T> class PidController
 		PidController(T targetValue, unsigned char length, unsigned char terms = 0xff);
 		~PidController(void);
 
-		unsigned char getCalculate();
-		void setCalculate(unsigned char calculate);
+		unsigned char getTerms();
+		void setTerms(unsigned char terms);
 		
 		float getProportionalGain(void);
 		void setProportionalGain(float proportionalGain);
 		float getIntegralGain(void);
 		void setIntegralGain(float integralGain);
 		float getDerivativeGain(void);
-		void setDerivativeGain(float DerivativeGain);
+		void setDerivativeGain(float derivativeGain);
 
 		void addValue(T value);
 
