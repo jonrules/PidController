@@ -90,7 +90,7 @@ template <class T>
 T PidController<T>::calculate()
 {
 	T result = (T)0;
-	unsigned long dt;
+	int dt;
 
 	// Calculate proportional term?
 	if (TERM_PROPORTIONAL & _terms)
@@ -105,7 +105,7 @@ T PidController<T>::calculate()
 				i = j, j = (j + 1) % _length, n++)
 		{
 			// Calculate differences
-			dt = _timeValues[j] - _timeValues[i];
+			dt = (int)(_timeValues[j] - _timeValues[i]);
 			if (dt > 0)
 			{
 				// Calculate integral term?
@@ -126,13 +126,9 @@ T PidController<T>::calculate()
 };
 
 template class PidController<char>;
-template class PidController<unsigned char>;
 template class PidController<int>;
-template class PidController<unsigned int>;
 template class PidController<long>;
-template class PidController<unsigned long>;
 template class PidController<long long>;
-template class PidController<unsigned long long>;
 template class PidController<float>;
 template class PidController<double>;
 
