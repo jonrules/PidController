@@ -1,7 +1,7 @@
 #include <PidController.h>
 
 template <class T>
-PidController<T>::PidController(T targetValue, unsigned char length, unsigned char terms = 0xff)
+PidController<T>::PidController(T targetValue, unsigned char length, unsigned char terms)
 {
 	_targetValue = targetValue;
 	_length = length;
@@ -122,4 +122,15 @@ T PidController<T>::calculateDerivative()
 
 	return result;
 };
+
+template class PidController<char>;
+template class PidController<unsigned char>;
+template class PidController<int>;
+template class PidController<unsigned int>;
+template class PidController<long>;
+template class PidController<unsigned long>;
+template class PidController<long long>;
+template class PidController<unsigned long long>;
+template class PidController<float>;
+template class PidController<double>;
 

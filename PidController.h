@@ -5,11 +5,11 @@ template <class T>
 class PidController
 {
 	public:
-		const unsigned char TERM_PROPORTIONAL = 1;
-		const unsigned char TERM_INTEGRAL = 2;
-		const unsigned char TERM_DERIVATIVE = 4;
+		static const unsigned char TERM_PROPORTIONAL = 1;
+		static const unsigned char TERM_INTEGRAL = 2;
+		static const unsigned char TERM_DERIVATIVE = 4;
 
-		PidController(T targetValue, unsigned char length, unsigned char terms);
+		PidController(T targetValue, unsigned char length, unsigned char terms = 0xff);
 		~PidController(void);
 
 		unsigned char getTerms();
