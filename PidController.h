@@ -24,20 +24,19 @@ class PidController
 
 		T *getValues();
 
+		unsigned long *getTimeValues();
+
 		void addValue(T value);
 
 		T calculate();
-		T calculateProportional();
-		T calculateIntegral();
-		T calculateDerivative();
 
 	private:
 		T _targetValue;
 		T *_values;
+		unsigned long *_timeValues;
+		unsigned char _currentIndex;
 		unsigned char _length;
 		unsigned char _terms;
-
-		unsigned int _initialTime;
 
 		float _proportionalGain = 1.0;
 		float _integralGain = 1.0;

@@ -1,4 +1,5 @@
 #include <PidController.h>
+#include <Arduino.h>
 
 template <class T>
 PidController<T>::PidController(T targetValue, unsigned char length, unsigned char terms)
@@ -7,12 +8,14 @@ PidController<T>::PidController(T targetValue, unsigned char length, unsigned ch
 	_length = length;
 	_terms = terms;
 	_values = new T[length];
+	_timeValues = new unsigned long[length];
 };
 
 template <class T>
 PidController<T>::~PidController(void)
 {
 	delete [] _values;
+	delete [] _timeValues;
 };
 
 template <class T>
@@ -70,55 +73,51 @@ T *PidController<T>::getValues(void)
 };
 
 template <class T>
+unsigned long *PidController<T>::getTimeValues(void)
+{
+	return _timeValues;
+};
+
+template <class T>
 void PidController<T>::addValue(T value)
 {
-	
+	_values[_currentIndex] = value - _targetValue;
+	_timeValues[_currentIndex] = millis();
+	_currentIndex = (_currentIndex + 1) % _length;
 };
 
 template <class T>
 T PidController<T>::calculate()
 {
 	T result = (T)0;
+	unsigned long dt;
 
 	// Calculate proportional term?
 	if (TERM_PROPORTIONAL & _terms)
 	{
-		result += calculateProportional();
+		result += _values[(_currentIndex + _length - 1) % _length]*_proportionalGain;
 	}
-	// Calculate integral term?
-	if (TERM_INTEGRAL & _terms)
+
+	if ((TERM_INTEGRAL | TERM_DERIVATIVE) & _terms)
 	{
-		result += calculateIntegral();
+		for (unsigned char i = _currentIndex, j = (_currentIndex + 1) % _length, n = 0; 
+				n < _length - 1; 
+				i = j, j = (j + 1) % _length, n++)
+		{
+			// Calculate differences
+			dt = _timeValues[j] - _timeValues[i];
+			// Calculate integral term?
+			if (TERM_INTEGRAL & _terms)
+			{
+				result += (_values[j] + _values[i])*dt*_integralGain/2;
+			}
+			// Calculate derivative term?
+			if (TERM_DERIVATIVE & _terms)
+			{
+				result += (_values[j] - _values[i])/dt*_derivativeGain;
+			}
+		}
 	}
-	// Calculate derivative term?
-	if (TERM_DERIVATIVE & _terms)
-	{
-		result += calculateDerivative();
-	}
-
-	return result;
-};
-
-template <class T>
-T PidController<T>::calculateProportional()
-{
-	T result = (T)0;
-
-	return result;
-};
-
-template <class T>
-T PidController<T>::calculateIntegral()
-{
-	T result = (T)0;
-
-	return result;
-};
-
-template <class T>
-T PidController<T>::calculateDerivative()
-{
-	T result = (T)0;
 
 	return result;
 };
