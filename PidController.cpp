@@ -106,15 +106,18 @@ T PidController<T>::calculate()
 		{
 			// Calculate differences
 			dt = _timeValues[j] - _timeValues[i];
-			// Calculate integral term?
-			if (TERM_INTEGRAL & _terms)
+			if (dt > 0)
 			{
-				result += (_values[j] + _values[i])*dt*_integralGain/2;
-			}
-			// Calculate derivative term?
-			if (TERM_DERIVATIVE & _terms)
-			{
-				result += (_values[j] - _values[i])/dt*_derivativeGain;
+				// Calculate integral term?
+				if (TERM_INTEGRAL & _terms)
+				{
+					result += (_values[j] + _values[i])*dt*_integralGain/2;
+				}
+				// Calculate derivative term?
+				if (TERM_DERIVATIVE & _terms)
+				{
+					result += (_values[j] - _values[i])/dt*_derivativeGain;
+				}
 			}
 		}
 	}
