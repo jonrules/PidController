@@ -14,6 +14,7 @@ class PidController
 		PidController(T targetValue);
 		PidController(T targetValue, unsigned long sampleTime);
 		PidController(T targetValue, unsigned long sampleTime, unsigned char terms);
+		PidController(T targetValue, unsigned long sampleTime, unsigned char terms, T tolerance);
 		~PidController(void);
 
 		T getTargetValue(void);
@@ -24,6 +25,9 @@ class PidController
 
 		unsigned char getTerms(void);
 		void setTerms(unsigned char terms);
+
+		T getTolerance(void);
+		void setTolerance(T tolerance);
 		
 		float getProportionalGain(void);
 		void setProportionalGain(float proportionalGain);
@@ -42,6 +46,7 @@ class PidController
 		T _targetValue;
 		T _lastError;
 		T _lastResult;
+		T _tolerance;
 		unsigned long _lastTime;
 		unsigned long _sampleTime;
 		unsigned char _currentIndex;

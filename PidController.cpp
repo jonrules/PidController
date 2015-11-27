@@ -1,31 +1,39 @@
 #include <PidController.h>
 #include <Arduino.h>
+#include <math.h>
 
 template <class T>
 PidController<T>::PidController(void)
 {
-	PidController(0, 100, TERM_ALL);
+	PidController(0, 100, TERM_ALL, (T)0);
 };
 
 template <class T>
 PidController<T>::PidController(T targetValue)
 {
-	PidController(targetValue, 100, TERM_ALL);
+	PidController(targetValue, 100, TERM_ALL, (T)0);
 };
 
 template <class T>
 PidController<T>::PidController(T targetValue, unsigned long sampleTime)
 {
-	PidController(targetValue, sampleTime, TERM_ALL);
+	PidController(targetValue, sampleTime, TERM_ALL, (T)0);
 };
 
 template <class T>
 PidController<T>::PidController(T targetValue, unsigned long sampleTime, unsigned char terms)
 {
+	PidController(targetValue, sampleTime, terms, (T)0);
+};
+
+template <class T>
+PidController<T>::PidController(T targetValue, unsigned long sampleTime, unsigned char terms, T tolerance)
+{
 	_targetValue = targetValue;
 	_sampleTime = sampleTime;
 	_terms = terms;
 	_lastTime = millis();
+	_tolerance = tolerance;
 };
 
 template <class T>
@@ -68,6 +76,18 @@ template <class T>
 void PidController<T>::setTerms(unsigned char terms)
 {
 	_terms = terms;
+};
+
+template <class T>
+T PidController<T>::getTolerance(void)
+{
+	return _tolerance;
+};
+
+template <class T>
+void PidController<T>::setTolerance(T tolerance)
+{
+	_tolerance = tolerance;
 };
 
 template <class T>
@@ -128,15 +148,14 @@ template <class T>
 T PidController<T>::calculate(T value)
 {
 	T result = (T)0;
+	T error = value - _targetValue;
 	unsigned long time = millis();
 	long dt = time - _lastTime;
 	
-	if (dt < _sampleTime)
+	if (dt < _sampleTime || abs(error) < _tolerance)
 	{
 		return _lastResult;
 	}
-
-	T error = value - _targetValue;
 
 	// Calculate proportional term?
 	if (TERM_PROPORTIONAL & _terms)
