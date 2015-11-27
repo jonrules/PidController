@@ -9,7 +9,7 @@ class PidController
 		static const unsigned char TERM_INTEGRAL = 2;
 		static const unsigned char TERM_DERIVATIVE = 4;
 
-		PidController(T targetValue, unsigned char length, unsigned char terms = 0xff);
+		PidController(T targetValue, unsigned long sampleTime, unsigned char terms = 0xff);
 		~PidController(void);
 
 		unsigned char getTerms();
@@ -22,20 +22,19 @@ class PidController
 		float getDerivativeGain(void);
 		void setDerivativeGain(float derivativeGain);
 
-		T *getValues();
+		T getLastError();
 
-		unsigned long *getTimeValues();
+		unsigned long getLastTime();
 
-		void addValue(T value);
-
-		T calculate();
+		T calculate(T value);
 
 	private:
 		T _targetValue;
-		T *_values;
-		unsigned long *_timeValues;
+		T _lastError;
+		T _lastResult;
+		unsigned long _lastTime;
+		unsigned long _sampleTime;
 		unsigned char _currentIndex;
-		unsigned char _length;
 		unsigned char _terms;
 
 		float _proportionalGain = 1.0;

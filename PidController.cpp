@@ -2,20 +2,18 @@
 #include <Arduino.h>
 
 template <class T>
-PidController<T>::PidController(T targetValue, unsigned char length, unsigned char terms)
+PidController<T>::PidController(T targetValue, unsigned long sampleTime, unsigned char terms)
 {
 	_targetValue = targetValue;
-	_length = length;
+	_sampleTime = sampleTime;
 	_terms = terms;
-	_values = new T[length];
-	_timeValues = new unsigned long[length];
+	_lastTime = millis();
 };
 
 template <class T>
 PidController<T>::~PidController(void)
 {
-	delete [] _values;
-	delete [] _timeValues;
+	
 };
 
 template <class T>
@@ -67,60 +65,50 @@ void PidController<T>::setDerivativeGain(float derivativeGain)
 };
 
 template <class T>
-T *PidController<T>::getValues(void)
+T PidController<T>::getLastError(void)
 {
-	return _values;
+	return _lastError;
 };
 
 template <class T>
-unsigned long *PidController<T>::getTimeValues(void)
+unsigned long PidController<T>::getLastTime(void)
 {
-	return _timeValues;
+	return _lastTime;
 };
 
 template <class T>
-void PidController<T>::addValue(T value)
-{
-	_values[_currentIndex] = value - _targetValue;
-	_timeValues[_currentIndex] = millis();
-	_currentIndex = (_currentIndex + 1) % _length;
-};
-
-template <class T>
-T PidController<T>::calculate()
+T PidController<T>::calculate(T value)
 {
 	T result = (T)0;
-	int dt;
+	unsigned long time = millis();
+	long  dt = time - _lastTime;
+	
+	if (dt < _sampleTime)
+	{
+		return _lastResult;
+	}
+
+	T error = value - _targetValue;
 
 	// Calculate proportional term?
 	if (TERM_PROPORTIONAL & _terms)
 	{
-		result += _values[(_currentIndex + _length - 1) % _length]*_proportionalGain;
+		result += error*_proportionalGain;
+	}
+	// Calculate integral term?
+	if (TERM_INTEGRAL & _terms)
+	{
+		result += (error + _lastError)*dt*_integralGain;
+	}
+	// Calculate derivative term?
+	if (TERM_DERIVATIVE & _terms)
+	{
+		result += (error - _lastError)/dt*_derivativeGain;
 	}
 
-	if ((TERM_INTEGRAL | TERM_DERIVATIVE) & _terms)
-	{
-		for (unsigned char i = _currentIndex, j = (_currentIndex + 1) % _length, n = 0; 
-				n < _length - 1; 
-				i = j, j = (j + 1) % _length, n++)
-		{
-			// Calculate differences
-			dt = (int)(_timeValues[j] - _timeValues[i]);
-			if (dt > 0)
-			{
-				// Calculate integral term?
-				if (TERM_INTEGRAL & _terms)
-				{
-					result += (_values[j] + _values[i])*dt*_integralGain/2;
-				}
-				// Calculate derivative term?
-				if (TERM_DERIVATIVE & _terms)
-				{
-					result += (_values[j] - _values[i])/dt*_derivativeGain;
-				}
-			}
-		}
-	}
+	_lastTime = time;
+	_lastError = error;
+	_lastResult = result;
 
 	return result;
 };
