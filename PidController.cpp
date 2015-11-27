@@ -2,6 +2,24 @@
 #include <Arduino.h>
 
 template <class T>
+PidController<T>::PidController(void)
+{
+	PidController(0, 100, 0x07);
+};
+
+template <class T>
+PidController<T>::PidController(T targetValue)
+{
+	PidController(targetValue, 100, 0x07);
+};
+
+template <class T>
+PidController<T>::PidController(T targetValue, unsigned long sampleTime)
+{
+	PidController(targetValue, sampleTime, 0x07);
+};
+
+template <class T>
 PidController<T>::PidController(T targetValue, unsigned long sampleTime, unsigned char terms)
 {
 	_targetValue = targetValue;
@@ -14,6 +32,30 @@ template <class T>
 PidController<T>::~PidController(void)
 {
 	
+};
+
+template <class T>
+T PidController<T>::getTargetValue()
+{
+	return _targetValue;
+};
+
+template <class T>
+void PidController<T>::setTargetValue(T targetValue)
+{
+	_targetValue = targetValue;
+};
+
+template <class T>
+unsigned long PidController<T>::getSampleTime()
+{
+	return _sampleTime;
+};
+
+template <class T>
+void PidController<T>::setSampleTime(unsigned long sampleTime)
+{
+	_sampleTime = sampleTime;
 };
 
 template <class T>
@@ -81,7 +123,7 @@ T PidController<T>::calculate(T value)
 {
 	T result = (T)0;
 	unsigned long time = millis();
-	long  dt = time - _lastTime;
+	long dt = time - _lastTime;
 	
 	if (dt < _sampleTime)
 	{

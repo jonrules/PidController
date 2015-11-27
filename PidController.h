@@ -9,8 +9,17 @@ class PidController
 		static const unsigned char TERM_INTEGRAL = 2;
 		static const unsigned char TERM_DERIVATIVE = 4;
 
-		PidController(T targetValue, unsigned long sampleTime, unsigned char terms = 0xff);
+		PidController(void);
+		PidController(T targetValue);
+		PidController(T targetValue, unsigned long sampleTime);
+		PidController(T targetValue, unsigned long sampleTime, unsigned char terms);
 		~PidController(void);
+
+		T getTargetValue();
+		void setTargetValue(T targetValue);
+
+		unsigned long getSampleTime();
+		void setSampleTime(unsigned long sampleTime);
 
 		unsigned char getTerms();
 		void setTerms(unsigned char terms);
