@@ -8,6 +8,7 @@ class PidController
 		static const unsigned char TERM_PROPORTIONAL = 1;
 		static const unsigned char TERM_INTEGRAL = 2;
 		static const unsigned char TERM_DERIVATIVE = 4;
+		static const unsigned char TERM_ALL = 7;
 
 		PidController(void);
 		PidController(T targetValue);

@@ -4,19 +4,19 @@
 template <class T>
 PidController<T>::PidController(void)
 {
-	PidController(0, 100, 0x07);
+	PidController(0, 100, TERM_ALL);
 };
 
 template <class T>
 PidController<T>::PidController(T targetValue)
 {
-	PidController(targetValue, 100, 0x07);
+	PidController(targetValue, 100, TERM_ALL);
 };
 
 template <class T>
 PidController<T>::PidController(T targetValue, unsigned long sampleTime)
 {
-	PidController(targetValue, sampleTime, 0x07);
+	PidController(targetValue, sampleTime, TERM_ALL);
 };
 
 template <class T>
