@@ -33,7 +33,7 @@ class PidController
 		void setDerivativeGain(float derivativeGain);
 
 		T getLastError(void);
-
+		T getLastResult(void);
 		unsigned long getLastTime(void);
 
 		T calculate(T value);

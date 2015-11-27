@@ -113,6 +113,12 @@ T PidController<T>::getLastError(void)
 };
 
 template <class T>
+T PidController<T>::getLastResult(void)
+{
+	return _lastResult;
+};
+
+template <class T>
 unsigned long PidController<T>::getLastTime(void)
 {
 	return _lastTime;
@@ -148,9 +154,9 @@ T PidController<T>::calculate(T value)
 		result += (error - _lastError)/dt*_derivativeGain;
 	}
 
-	_lastTime = time;
 	_lastError = error;
 	_lastResult = result;
+	_lastTime = time;
 
 	return result;
 };
