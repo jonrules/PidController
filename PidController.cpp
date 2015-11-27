@@ -35,7 +35,7 @@ PidController<T>::~PidController(void)
 };
 
 template <class T>
-T PidController<T>::getTargetValue()
+T PidController<T>::getTargetValue(void)
 {
 	return _targetValue;
 };
@@ -47,7 +47,7 @@ void PidController<T>::setTargetValue(T targetValue)
 };
 
 template <class T>
-unsigned long PidController<T>::getSampleTime()
+unsigned long PidController<T>::getSampleTime(void)
 {
 	return _sampleTime;
 };
@@ -59,7 +59,7 @@ void PidController<T>::setSampleTime(unsigned long sampleTime)
 };
 
 template <class T>
-unsigned char PidController<T>::getTerms()
+unsigned char PidController<T>::getTerms(void)
 {
 	return _terms;
 };

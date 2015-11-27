@@ -16,13 +16,13 @@ class PidController
 		PidController(T targetValue, unsigned long sampleTime, unsigned char terms);
 		~PidController(void);
 
-		T getTargetValue();
+		T getTargetValue(void);
 		void setTargetValue(T targetValue);
 
-		unsigned long getSampleTime();
+		unsigned long getSampleTime(void);
 		void setSampleTime(unsigned long sampleTime);
 
-		unsigned char getTerms();
+		unsigned char getTerms(void);
 		void setTerms(unsigned char terms);
 		
 		float getProportionalGain(void);
@@ -32,9 +32,9 @@ class PidController
 		float getDerivativeGain(void);
 		void setDerivativeGain(float derivativeGain);
 
-		T getLastError();
+		T getLastError(void);
 
-		unsigned long getLastTime();
+		unsigned long getLastTime(void);
 
 		T calculate(T value);
 
