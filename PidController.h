@@ -46,6 +46,8 @@ class PidController
 		T _targetValue;
 		T _lastError;
 		T _lastResult;
+		T _lastIntegralResult;
+		T _lastDerivativeResult;
 		T _tolerance;
 		unsigned long _lastTime;
 		unsigned long _sampleTime;

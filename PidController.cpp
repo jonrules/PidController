@@ -32,8 +32,8 @@ PidController<T>::PidController(T targetValue, unsigned long sampleTime, unsigne
 	_targetValue = targetValue;
 	_sampleTime = sampleTime;
 	_terms = terms;
-	_lastTime = millis();
 	_tolerance = tolerance;
+	_lastTime = millis();
 };
 
 template <class T>
@@ -152,7 +152,7 @@ T PidController<T>::calculate(T value)
 	unsigned long time = millis();
 	long dt = time - _lastTime;
 	
-	if (dt < _sampleTime || abs(error) < _tolerance)
+	if (abs(error) < _tolerance)
 	{
 		return _lastResult;
 	}
@@ -162,15 +162,22 @@ T PidController<T>::calculate(T value)
 	{
 		result += error*_proportionalGain;
 	}
+	if (dt < _sampleTime) {
+		result += _lastIntegralResult + _lastDerivativeResult;
+		_lastResult = result;
+		return result;
+	}
 	// Calculate integral term?
 	if (TERM_INTEGRAL & _terms)
 	{
-		result += (error + _lastError)*dt*_integralGain;
+		_lastIntegralResult = (error + _lastError)*dt*_integralGain;
+		result += _lastIntegralResult;
 	}
 	// Calculate derivative term?
 	if (TERM_DERIVATIVE & _terms)
 	{
-		result += (error - _lastError)/dt*_derivativeGain;
+		_lastDerivativeResult = (error - _lastError)/dt*_derivativeGain;
+		result += _lastDerivativeResult;
 	}
 
 	_lastError = error;
